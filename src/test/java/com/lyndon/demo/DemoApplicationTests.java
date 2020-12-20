@@ -41,4 +41,11 @@ class DemoApplicationTests {
 		System.out.println(map.get("createActor"));
 	}
 
+	@Test
+	public void page() throws Exception {
+		ExecutionResult result = graphQL.execute(IOUtils.toString(new ClassPathResource("./query.graphql").getInputStream()));
+		Map map = (Map) result.getData();
+		System.out.println(map.get("actors"));
+	}
+
 }

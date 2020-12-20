@@ -5,6 +5,8 @@ import graphql.GraphQL;
 import graphql.Scalars;
 import graphql.execution.AsyncExecutionStrategy;
 import graphql.kickstart.tools.SchemaParser;
+import graphql.kickstart.tools.SchemaParserOptions;
+import graphql.kickstart.tools.relay.RelayConnectionFactory;
 import graphql.schema.GraphQLScalarType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,7 +38,10 @@ public class GraphQLConfig {
 	@Bean
 	public GraphQL getGraphQL() throws Exception {
 		return GraphQL
-				.newGraphQL(SchemaParser.newParser().file("schema.graphqls").resolvers(query, mutation, actorResolver)
+				.newGraphQL(SchemaParser.newParser().file("schema.graphqls")
+						.options(SchemaParserOptions.newOptions().typeDefinitionFactory(new RelayConnectionFactory())
+								.build())
+						.resolvers(query, mutation, actorResolver)
 						.scalars(Scalars.GraphQLLong, graphQLLocalDateTimeType).build().makeExecutableSchema())
 				.queryExecutionStrategy(asyncExecutionStrategy).build();
 	}

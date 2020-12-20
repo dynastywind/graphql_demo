@@ -1,6 +1,6 @@
 type Query {
     actorById(id: Long): Actor
-    actors: [Actor!]
+    actors(page: Int, size: Int): ActorConnection @connection(for: "Actor")
 }
 
 type Actor {

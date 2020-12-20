@@ -12,10 +12,18 @@
             }
         }
     }
-#    actors {
-#        id
-#        firstName
-#    }
+    actors(page: 1, size: 1) {
+        edges {
+            cursor
+            node {
+                id
+                firstName
+            }
+        }
+        pageInfo {
+            hasNextPage
+        }
+    }
     __schema {
         mutationType {
             fields {
