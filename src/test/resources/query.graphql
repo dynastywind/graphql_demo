@@ -1,0 +1,26 @@
+{
+    actorById(id: 1) {
+        id
+        firstName
+        lastName
+        lastUpdate
+        films {
+            id
+            title
+            language {
+                name
+            }
+        }
+    }
+#    actors {
+#        id
+#        firstName
+#    }
+    __schema {
+        mutationType {
+            fields {
+                name
+            }
+        }
+    }
+}

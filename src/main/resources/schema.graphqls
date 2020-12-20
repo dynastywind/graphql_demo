@@ -1,0 +1,65 @@
+type Query {
+    actorById(id: Long): Actor
+    actors: [Actor!]
+}
+
+type Actor {
+    id: Long
+    firstName: String
+    lastName: String
+    lastUpdate: datetime
+    films: [Film!]
+}
+
+type Film {
+    id: Long
+    title: String!
+    description: String
+    releaseYear: Int
+    rentalDuration: Int!
+    rentalRate: Float!
+    length: Int
+    replacementCost: Float!
+    rating: String
+    specialFeatures: String!
+    lastUpdate: datetime
+    language: Langugae
+    originalLanguage: Langugae
+    actors: [Actor!]
+}
+
+type Langugae {
+    id: Long
+    name: String
+    lastUpdate: datetime
+}
+
+scalar Long
+scalar datetime
+
+type Mutation {
+    createActor(actor: ActorInput): Actor
+}
+
+input ActorInput {
+    id: Long
+    firstName: String
+    lastName: String
+    lastUpdate: datetime
+    films: [FilmInput!]
+}
+
+input LanguageInput {
+    id: Long
+}
+
+input FilmInput {
+    id: Long
+    title: String!
+    actors: [ActorInput!]
+    language: LanguageInput!
+    rentalDuration: Int!
+    rentalRate: Float!
+    replacementCost: Float!
+    lastUpdate: datetime!
+}
