@@ -34,11 +34,23 @@ type Langugae {
     lastUpdate: datetime
 }
 
-scalar Long
-scalar datetime
+type A {
+    demo: JSONType
+}
+
+input LanguageInput {
+    id: Long
+}
+
+input TestInput {
+    id: Long
+    messages: JSONType
+}
 
 type Mutation {
     createActor(actor: ActorInput): Actor
+    test(in: TestInputAudit @audit(for: "TestInput")): String
+#    test(in: String): String
 }
 
 input ActorInput {
@@ -47,10 +59,6 @@ input ActorInput {
     lastName: String
     lastUpdate: datetime
     films: [FilmInput!]
-}
-
-input LanguageInput {
-    id: Long
 }
 
 input FilmInput {
@@ -63,3 +71,7 @@ input FilmInput {
     replacementCost: Float!
     lastUpdate: datetime!
 }
+
+scalar Long
+scalar JSONType
+scalar datetime

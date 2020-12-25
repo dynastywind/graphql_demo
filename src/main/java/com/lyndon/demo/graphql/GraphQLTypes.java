@@ -1,5 +1,6 @@
 package com.lyndon.demo.graphql;
 
+import com.alibaba.fastjson.JSONObject;
 import graphql.Scalars;
 import graphql.language.StringValue;
 import graphql.schema.*;
@@ -51,6 +52,37 @@ public class GraphQLTypes {
 				} catch (Exception e) {
 					throw new CoercingParseLiteralException(
 							"Expected AST type 'StringValue' but was '" + typeName(input) + "'.");
+				}
+				throw new CoercingParseLiteralException(
+						"Expected AST type 'StringValue' but was '" + typeName(input) + "'.");
+			}
+		}).build();
+	}
+
+	@Bean("graphQLJSONType")
+	public GraphQLScalarType getGraphQLJSONType() {
+		return GraphQLScalarType.newScalar().name("JSONType").coercing(new Coercing<JSONObject, JSONObject>() {
+			@Override
+			public JSONObject serialize(Object dataFetcherResult) throws CoercingSerializeException {
+				if (dataFetcherResult instanceof String) {
+					return JSONObject.parseObject((String) dataFetcherResult);
+				}
+				throw new CoercingParseLiteralException(
+						"Expected a 'String' but was '" + typeName(dataFetcherResult) + "'.");
+			}
+
+			@Override
+			public JSONObject parseValue(Object input) throws CoercingParseValueException {
+				if (input instanceof String) {
+					return JSONObject.parseObject((String) input);
+				}
+				throw new CoercingParseLiteralException("Expected a 'String' but was '" + typeName(input) + "'.");
+			}
+
+			@Override
+			public JSONObject parseLiteral(Object input) throws CoercingParseLiteralException {
+				if (input instanceof StringValue) {
+					return JSONObject.parseObject(((StringValue) input).getValue());
 				}
 				throw new CoercingParseLiteralException(
 						"Expected AST type 'StringValue' but was '" + typeName(input) + "'.");

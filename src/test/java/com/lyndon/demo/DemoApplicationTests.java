@@ -12,7 +12,8 @@ import org.springframework.core.io.ClassPathResource;
 import javax.transaction.Transactional;
 import java.util.Map;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 class DemoApplicationTests {
 
 	@Autowired
@@ -46,6 +47,13 @@ class DemoApplicationTests {
 		ExecutionResult result = graphQL.execute(IOUtils.toString(new ClassPathResource("./query.graphql").getInputStream()));
 		Map map = (Map) result.getData();
 		System.out.println(map.get("actors"));
+	}
+
+	@Test
+	public void audit() throws Exception {
+		ExecutionResult result = graphQL.execute(IOUtils.toString(new ClassPathResource("./modify.graphql").getInputStream()));
+		Map map = (Map) result.getData();
+		System.out.println(map.get("test"));
 	}
 
 }

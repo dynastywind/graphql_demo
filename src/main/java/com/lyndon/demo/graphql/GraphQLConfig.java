@@ -1,10 +1,10 @@
 package com.lyndon.demo.graphql;
 
-import com.lyndon.demo.entity.Actor;
 import graphql.GraphQL;
 import graphql.Scalars;
 import graphql.execution.AsyncExecutionStrategy;
 import graphql.kickstart.tools.SchemaParser;
+import graphql.kickstart.tools.SchemaParserBuilder;
 import graphql.kickstart.tools.SchemaParserOptions;
 import graphql.kickstart.tools.relay.RelayConnectionFactory;
 import graphql.schema.GraphQLScalarType;
@@ -27,6 +27,10 @@ public class GraphQLConfig {
 	private GraphQLScalarType graphQLLocalDateTimeType;
 
 	@Autowired
+	@Qualifier("graphQLJSONType")
+	private GraphQLScalarType graphQLJSONType;
+
+	@Autowired
 	private Query query;
 
 	@Autowired
@@ -37,13 +41,13 @@ public class GraphQLConfig {
 
 	@Bean
 	public GraphQL getGraphQL() throws Exception {
-		return GraphQL
-				.newGraphQL(SchemaParser.newParser().file("schema.graphqls")
-						.options(SchemaParserOptions.newOptions().typeDefinitionFactory(new RelayConnectionFactory())
-								.build())
-						.resolvers(query, mutation, actorResolver)
-						.scalars(Scalars.GraphQLLong, graphQLLocalDateTimeType).build().makeExecutableSchema())
-				.queryExecutionStrategy(asyncExecutionStrategy).build();
+		SchemaParserBuilder builder = SchemaParser.newParser().file("schema.graphqls")
+				.options(SchemaParserOptions.newOptions().typeDefinitionFactory(new RelayConnectionFactory())
+						.typeDefinitionFactory(new AuditFactory()).includeUnusedTypes(true).build())
+				.resolvers(query, mutation, actorResolver).dictionary("A", A.class)
+				.scalars(Scalars.GraphQLLong, graphQLLocalDateTimeType, graphQLJSONType);
+		SchemaParser parser = builder.build();
+		return GraphQL.newGraphQL(parser.makeExecutableSchema()).queryExecutionStrategy(asyncExecutionStrategy).build();
 	}
 
 }

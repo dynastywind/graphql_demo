@@ -1,21 +1,30 @@
 mutation {
-    createActor(actor: {
-        firstName: "Lyndon",
-        lastName: "Li",
-        lastUpdate: "2020-01-01 00:00:00",
-        films: [
-            {
-                title: "Film"
-                language: {
-                    id: 1
-                }
-                rentalDuration: 1
-                rentalRate: 0.1
-                replacementCost: 0.1
-                lastUpdate: "2020-01-01 00:00:00"
+#    createActor(actor: {
+#        firstName: "Lyndon",
+#        lastName: "Li",
+#        lastUpdate: "2020-01-01 00:00:00",
+#        films: [
+#            {
+#                title: "Film"
+#                language: {
+#                    id: 1
+#                }
+#                rentalDuration: 1
+#                rentalRate: 0.1
+#                replacementCost: 0.1
+#                lastUpdate: "2020-01-01 00:00:00"
+#            }
+#        ]
+#    }) {
+#        id
+#    }
+    test(in: {
+            content: {
+                id: 1
+                messages: "{\"demo\": 1}"
             }
-        ]
-    }) {
-        id
-    }
+            operator: "lyndon"
+        }
+    )
+#    test(in: "hello")
 }
